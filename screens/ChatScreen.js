@@ -29,7 +29,8 @@ const ChatScreen = ({ navigation, route }) => {
                     <Avatar 
                     rounded
                     source={{
-                        uri:"https://cencup.com/wp-content/uploads/2019/07/avatar-placeholder.png",
+                        uri:
+                        messages[0]?.data.photoURL,
                     }}
                     />
                     <Text style={{color: 'white', marginLeft: 10, fontWeight: '700'}}>
@@ -69,7 +70,7 @@ const ChatScreen = ({ navigation, route }) => {
             )
        }) 
        
-    }, [navigation])
+    }, [navigation, messages])
 
     const sendMessage =() =>{
             Keyboard.dismiss();
@@ -109,12 +110,50 @@ const ChatScreen = ({ navigation, route }) => {
             keyboardVerticalOffset={90} >
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss} />
                     
-                    <ScrollView>
+                    <ScrollView
+                    contentContainerStyle={{ paddingTop: 15}}
+                    >
                     {messages.map(({id, data}) => (
                         data.email === auth.currentUser.email ? (
-                            <View></View>
+                            <View key={id} style={styles.reciever}>
+                                <Avatar 
+                                //web
+                                containerStyle={{
+                                    position:'absolute',
+                                    bottom:-15,
+                                    right: -5
+                                }}
+                              
+                                rounded
+                                bottom={-15}
+                                right={-5}
+                                size={30}
+                               source ={{
+                                uri: data.photoURL,
+                               }}
+                                />
+                                <Text style={styles.recieverText}>{data.message}</Text>
+                            </View>
                         ) : (
-                            <View></View>
+                            <View style={styles.sender}>
+                                <Avatar
+                                 containerStyle={{
+                                    position:'absolute',
+                                    bottom:-15,
+                                    right: -5
+                                }}
+                              
+                                rounded
+                                bottom={-15}
+                                right={-5}
+                                size={30}
+                               source ={{
+                                uri: data.photoURL,
+                               }}
+                                />
+                                <Text style={styles.senderText}>{data.message}</Text>
+                                <Text style={styles.senderName}>{data.displayName}</Text>
+                            </View>
                         )
                     ))}
 
@@ -162,5 +201,42 @@ const styles = StyleSheet.create({
             padding: 10,
             color: 'grey',
             borderRadius: 30
+    },
+    senderText:{
+        color: "white",
+        fontWeight: '500',
+        marginLeft: 10,
+        marginBottom: 15,
+    },
+    reciever:{
+        padding: 15,
+        backgroundColor:'#ececec',
+        alignSelf: 'flex-end',
+        borderRadius: 20,
+        marginRight: 15,
+        marginBottom: 20,
+        maxWidth: '80%',
+        position: 'relative',
+
+    },
+    sender:{
+        padding: 15,
+        backgroundColor:'#2b68e6',
+        alignSelf:'flex-start',
+        borderRadius: 20,
+        margin: 15,
+        maxWidth: '80%',
+        position: 'relative'
+    },
+    senderName:{
+        left: 10,
+        paddingRight: 10,
+        fontSize:  10,
+        color: 'white',
+    },
+    recieverText:{
+        color: 'black',
+        fontWeight: '500',
+        marginLeft: 15
     }
 })
